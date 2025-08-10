@@ -47,6 +47,12 @@ export function DocumentVerificationStep({ formData, updateFormData, onNext, onP
     mode: 'onChange',
   });
 
+  // Watch form values to track changes
+  const watchedValues = watch();
+  
+  // Check if both document type and file are selected
+  const isFormComplete = watchedValues.documentType && uploadedFile;
+
   const onDrop = useCallback((acceptedFiles: File[]) => {
     const file = acceptedFiles[0];
     if (file) {
@@ -239,9 +245,9 @@ export function DocumentVerificationStep({ formData, updateFormData, onNext, onP
           
           <button
             type="submit"
-            disabled={!isValid || isLoading}
+            disabled={!isFormComplete || isLoading}
             className={`flex items-center space-x-2 px-6 py-3 rounded-lg font-medium transition-colors ${
-              isValid && !isLoading
+              isFormComplete && !isLoading
                 ? 'bg-blue-600 text-white hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
                 : 'bg-gray-300 text-gray-500 cursor-not-allowed'
             }`}
