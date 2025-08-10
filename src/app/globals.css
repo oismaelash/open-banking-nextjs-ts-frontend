@@ -24,3 +24,108 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Improved form input contrast */
+input, textarea, select {
+  color: #1f2937 !important; /* Dark gray for better contrast */
+  background-color: #ffffff !important;
+}
+
+/* Improved placeholder contrast */
+input::placeholder, textarea::placeholder {
+  color: #6b7280 !important; /* Medium gray for better contrast */
+  opacity: 1 !important; /* Ensure opacity is not reduced */
+}
+
+/* Focus state improvements */
+input:focus, textarea:focus, select:focus {
+  color: #111827 !important; /* Even darker for focus state */
+  background-color: #ffffff !important;
+}
+
+/* Disabled state improvements */
+input:disabled, textarea:disabled, select:disabled {
+  color: #9ca3af !important; /* Light gray but still readable */
+  background-color: #f9fafb !important;
+}
+
+/* Form labels - improved contrast */
+label {
+  color: #374151 !important; /* Darker gray for labels */
+  font-weight: 500 !important;
+}
+
+/* Error text - improved contrast */
+.text-red-600 {
+  color: #dc2626 !important; /* Brighter red for better contrast */
+}
+
+/* Success text - improved contrast */
+.text-green-600 {
+  color: #16a34a !important; /* Brighter green for better contrast */
+}
+
+/* Description text - improved contrast */
+.text-gray-600 {
+  color: #4b5563 !important; /* Darker gray for better contrast */
+}
+
+/* Icon colors - improved contrast */
+.text-gray-400 {
+  color: #6b7280 !important; /* Medium gray for better contrast */
+}
+
+/* Button text - improved contrast */
+button:not(:disabled) {
+  color: inherit !important;
+}
+
+button:disabled {
+  color: #6b7280 !important; /* Medium gray for disabled buttons */
+}
+
+/* Verification code inputs - improved contrast */
+input[type="text"][maxlength="6"] {
+  color: #111827 !important; /* Dark text for verification codes */
+  font-weight: 600 !important; /* Slightly bolder for better readability */
+}
+
+/* Date input - improved contrast */
+input[type="date"] {
+  color: #111827 !important;
+}
+
+/* Select dropdowns - improved contrast */
+select {
+  color: #111827 !important;
+}
+
+select option {
+  color: #111827 !important;
+  background-color: #ffffff !important;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  input, textarea, select {
+    color: #000000 !important;
+    background-color: #ffffff !important;
+    border-color: #000000 !important;
+  }
+  
+  input::placeholder, textarea::placeholder {
+    color: #666666 !important;
+  }
+  
+  label {
+    color: #000000 !important;
+  }
+  
+  .text-gray-600 {
+    color: #333333 !important;
+  }
+  
+  .text-gray-400 {
+    color: #666666 !important;
+  }
+}
