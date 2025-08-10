@@ -273,10 +273,10 @@ export default function DashboardPage() {
             </div>
             <div className="flex items-center space-x-4">
               <button className="p-2 text-gray-700 hover:text-gray-900 transition-colors">
-                <Bell className="w-5 h-5" />
+                <Bell className="w-5 h-5 text-gray-700" />
               </button>
               <button className="p-2 text-gray-700 hover:text-gray-900 transition-colors">
-                <Settings className="w-5 h-5" />
+                <Settings className="w-5 h-5 text-gray-700" />
               </button>
               <button
                 onClick={() => {
@@ -286,7 +286,7 @@ export default function DashboardPage() {
                 }}
                 className="text-gray-700 hover:text-gray-900 transition-colors font-medium"
               >
-                Sair
+                <span className="text-gray-700">Sair</span>
               </button>
             </div>
           </div>
