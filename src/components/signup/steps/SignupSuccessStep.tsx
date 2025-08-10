@@ -40,21 +40,6 @@ export function SignupSuccessStep() {
         <h3 className="text-lg font-semibold text-gray-900">What's Next?</h3>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* Email Verification */}
-          <div className="border border-gray-200 rounded-lg p-4">
-            <div className="flex items-center space-x-3 mb-3">
-              <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                <Mail className="w-4 h-4 text-blue-600" />
-              </div>
-              <h4 className="font-medium text-gray-900">Email Verification</h4>
-            </div>
-            <p className="text-sm text-gray-600 mb-3">
-              Check your email for a verification link to activate your account fully.
-            </p>
-            <div className="text-xs text-gray-500">
-              Expected: Within 5 minutes
-            </div>
-          </div>
 
           {/* Document Review */}
           <div className="border border-gray-200 rounded-lg p-4">
