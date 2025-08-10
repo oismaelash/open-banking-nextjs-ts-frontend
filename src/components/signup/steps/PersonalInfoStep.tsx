@@ -45,6 +45,8 @@ export function PersonalInfoStep({ formData, updateFormData, onNext, isLoading }
     handleSubmit,
     formState: { errors, isValid },
     watch,
+    setValue,
+    trigger,
   } = useForm<PersonalInfoFormData>({
     resolver: zodResolver(personalInfoSchema),
     defaultValues: {
@@ -75,12 +77,14 @@ export function PersonalInfoStep({ formData, updateFormData, onNext, isLoading }
 
   const handleCPFChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const formatted = formatCPF(e.target.value);
-    e.target.value = formatted;
+    setValue('cpf', formatted, { shouldValidate: true });
+    trigger('cpf');
   };
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const formatted = formatDate(e.target.value);
-    e.target.value = formatted;
+    setValue('dateOfBirth', formatted, { shouldValidate: true });
+    trigger('dateOfBirth');
   };
 
   const onSubmit = (data: PersonalInfoFormData) => {
@@ -139,6 +143,7 @@ export function PersonalInfoStep({ formData, updateFormData, onNext, isLoading }
               type="text"
               id="cpf"
               maxLength={14}
+              value={watchedValues.cpf || ''}
               className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
                 errors.cpf ? 'border-red-300' : 'border-gray-300'
               }`}
@@ -165,6 +170,7 @@ export function PersonalInfoStep({ formData, updateFormData, onNext, isLoading }
               {...register('dateOfBirth')}
               type="text"
               id="dateOfBirth"
+              value={watchedValues.dateOfBirth || ''}
               className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
                 errors.dateOfBirth ? 'border-red-300' : 'border-gray-300'
               }`}
