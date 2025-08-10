@@ -61,6 +61,8 @@ export function BiometricSetupStep({ formData, updateFormData, onNext, onPrev, i
   const skipBiometric = () => {
     setValue('enableBiometric', false);
     setValue('biometricType', 'none');
+    updateFormData({ enableBiometric: false, biometricType: 'none' });
+    onNext();
   };
 
   const onSubmit = (data: BiometricSetupFormData) => {
@@ -255,27 +257,37 @@ export function BiometricSetupStep({ formData, updateFormData, onNext, onPrev, i
             <span>Back</span>
           </button>
           
-          <button
-            type="submit"
-            disabled={isLoading}
-            className={`flex items-center space-x-2 px-6 py-3 rounded-lg font-medium transition-colors ${
-              !isLoading
-                ? 'bg-blue-600 text-white hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
-                : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-            }`}
-          >
-            {isLoading ? (
-              <>
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                <span>Processing...</span>
-              </>
-            ) : (
-              <>
-                <span>Complete Setup</span>
-                <ArrowRight className="w-4 h-4" />
-              </>
-            )}
-          </button>
+          <div className="flex space-x-3">
+            <button
+              type="button"
+              onClick={skipBiometric}
+              className="px-6 py-3 border border-gray-300 rounded-lg font-medium text-gray-600 hover:bg-gray-50 focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors"
+            >
+              Skip
+            </button>
+            
+            <button
+              type="submit"
+              disabled={isLoading}
+              className={`flex items-center space-x-2 px-6 py-3 rounded-lg font-medium transition-colors ${
+                !isLoading
+                  ? 'bg-blue-600 text-white hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
+                  : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+              }`}
+            >
+              {isLoading ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  <span>Processing...</span>
+                </>
+              ) : (
+                <>
+                  <span>Complete Setup</span>
+                  <ArrowRight className="w-4 h-4" />
+                </>
+              )}
+            </button>
+          </div>
         </div>
       </form>
     </div>
