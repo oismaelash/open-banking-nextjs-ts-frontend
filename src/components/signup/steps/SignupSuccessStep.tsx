@@ -97,14 +97,6 @@ export function SignupSuccessStep() {
             <span>Go to Dashboard</span>
             <ArrowRight className="w-4 h-4" />
           </Link>
-          
-          <button
-            onClick={() => window.print()}
-            className="flex-1 flex items-center justify-center space-x-2 border border-gray-300 text-gray-700 py-3 px-6 rounded-lg font-medium hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
-          >
-            <Download className="w-4 h-4" />
-            <span>Download Receipt</span>
-          </button>
         </div>
 
         <div className="text-center">
