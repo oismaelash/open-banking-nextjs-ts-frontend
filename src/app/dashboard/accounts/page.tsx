@@ -310,7 +310,7 @@ export default function AccountsPage() {
           <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4 animate-pulse">
             <Building2 className="w-8 h-8 text-white" />
           </div>
-          <p className="text-gray-600">Carregando suas contas...</p>
+          <p className="text-gray-700">Carregando suas contas...</p>
         </div>
       </div>
     );
@@ -324,10 +324,10 @@ export default function AccountsPage() {
           <div className="flex items-center h-16">
             <button
               onClick={() => router.push('/dashboard')}
-              className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 transition-colors"
+              className="flex items-center space-x-2 text-gray-700 hover:text-gray-900 transition-colors font-medium"
             >
-              <ArrowLeft className="w-5 h-5" />
-              <span>Voltar</span>
+              <ArrowLeft className="w-5 h-5 text-gray-700" />
+              <span className="text-gray-700">Voltar</span>
             </button>
             <div className="ml-6 flex items-center space-x-3">
               <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
@@ -350,7 +350,7 @@ export default function AccountsPage() {
                   <DollarSign className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <p className="text-sm text-gray-600">Saldo Total</p>
+                  <p className="text-sm text-gray-700">Saldo Total</p>
                   <p className="text-2xl font-bold text-gray-900">
                     {showBalances ? formatCurrency(totalBalance) : '••••••'}
                   </p>
@@ -358,13 +358,13 @@ export default function AccountsPage() {
               </div>
               <button
                 onClick={() => setShowBalances(!showBalances)}
-                className="p-2 text-gray-600 hover:text-gray-900 transition-colors"
+                className="p-2 text-slate-600 hover:text-slate-900 transition-colors"
               >
                 {showBalances ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
               </button>
             </div>
             <div className="flex items-center justify-between text-sm">
-              <span className="text-gray-600">Disponível:</span>
+              <span className="text-gray-700">Disponível:</span>
               <span className="font-semibold text-green-600">
                 {showBalances ? formatCurrency(totalAvailable) : '••••••'}
               </span>
@@ -377,11 +377,11 @@ export default function AccountsPage() {
                 <Wallet className="w-6 h-6 text-white" />
               </div>
               <div>
-                <p className="text-sm text-gray-600">Contas Ativas</p>
+                <p className="text-sm text-gray-700">Contas Ativas</p>
                 <p className="text-2xl font-bold text-gray-900">{accounts.length}</p>
               </div>
             </div>
-            <div className="text-sm text-gray-600">
+            <div className="text-sm text-gray-700">
               {accounts.filter(a => a.status === 'active').length} contas disponíveis
             </div>
           </div>
@@ -392,7 +392,7 @@ export default function AccountsPage() {
                 <BarChart3 className="w-6 h-6 text-white" />
               </div>
               <div>
-                <p className="text-sm text-gray-600">Transações Hoje</p>
+                <p className="text-sm text-gray-700">Transações Hoje</p>
                 <p className="text-2xl font-bold text-gray-900">
                   {transactions.filter(t => 
                     new Date(t.date).toDateString() === new Date().toDateString()
@@ -400,25 +400,25 @@ export default function AccountsPage() {
                 </p>
               </div>
             </div>
-            <div className="text-sm text-gray-600">
+            <div className="text-sm text-gray-700">
               Última atualização: {new Date().toLocaleTimeString('pt-BR')}
             </div>
           </div>
 
           <div className="bg-white rounded-2xl shadow-lg p-6">
             <div className="flex items-center space-x-3 mb-4">
-              <div className="w-10 h-10 bg-orange-600 rounded-lg flex items-center justify-center">
+              <div className="w-10 h-10 bg-green-600 rounded-lg flex items-center justify-center">
                 <TrendingUp className="w-6 h-6 text-white" />
               </div>
               <div>
-                <p className="text-sm text-gray-600">Rendimento Mensal</p>
+                <p className="text-sm text-gray-700">Rendimento Mensal</p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {showBalances ? formatCurrency(125.50) : '••••••'}
+                  {formatCurrency(accounts.reduce((sum, account) => sum + (account.balance * 0.005), 0))}
                 </p>
               </div>
             </div>
-            <div className="text-sm text-gray-600">
-              +0.5% este mês
+            <div className="text-sm text-gray-700">
+              Baseado no saldo atual
             </div>
           </div>
         </div>
@@ -444,7 +444,7 @@ export default function AccountsPage() {
                         </div>
                         <div>
                           <p className="font-medium text-gray-900">{account.name}</p>
-                          <p className="text-sm text-gray-600">{account.number}</p>
+                          <p className="text-sm text-gray-700">{account.number}</p>
                         </div>
                       </div>
                       <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(account.status)}`}>
@@ -452,24 +452,24 @@ export default function AccountsPage() {
                       </span>
                     </div>
                     
-                    <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-sm text-gray-600">Saldo</p>
+                        <p className="text-sm text-gray-700">Saldo</p>
                         <p className="font-semibold text-gray-900">
                           {showBalances ? formatCurrency(account.balance) : '••••••'}
                         </p>
                       </div>
                       <div className="text-right">
-                        <p className="text-sm text-gray-600">Disponível</p>
+                        <p className="text-sm text-gray-700">Disponível</p>
                         <p className="font-semibold text-green-600">
                           {showBalances ? formatCurrency(account.availableBalance) : '••••••'}
                         </p>
                       </div>
                     </div>
                     
-                    <div className="flex items-center justify-between text-xs text-gray-500 mb-3">
-                      <span>{account.bank}</span>
-                      <span>Limite: {formatCurrency(account.dailyLimit)}/dia</span>
+                    <div className="flex items-center justify-between text-xs text-gray-600 mb-3">
+                      <span>Última atualização: {formatDate(account.lastUpdated)}</span>
+                      <span>Banco: {account.bank}</span>
                     </div>
 
                     <div className="flex items-center justify-between">
@@ -491,24 +491,24 @@ export default function AccountsPage() {
                     {showAccountDetails === account.id && (
                       <div className="mt-4 pt-4 border-t border-gray-100 space-y-2 text-sm">
                         <div className="flex justify-between">
-                          <span className="text-gray-600">Data de Abertura:</span>
-                          <span>{formatDate(account.openingDate)}</span>
+                          <span className="text-gray-700">Data de Abertura:</span>
+                          <span className="text-gray-900">{formatDate(account.openingDate)}</span>
                         </div>
                         {account.interestRate && (
                           <div className="flex justify-between">
-                            <span className="text-gray-600">Taxa de Juros:</span>
-                            <span>{account.interestRate}% ao mês</span>
+                            <span className="text-gray-700">Taxa de Juros:</span>
+                            <span className="text-gray-900">{account.interestRate}%</span>
                           </div>
                         )}
-                        {account.monthlyFee !== undefined && (
+                        {account.monthlyFee && (
                           <div className="flex justify-between">
-                            <span className="text-gray-600">Taxa Mensal:</span>
-                            <span>{formatCurrency(account.monthlyFee)}</span>
+                            <span className="text-gray-700">Taxa Mensal:</span>
+                            <span className="text-gray-900">{formatCurrency(account.monthlyFee)}</span>
                           </div>
                         )}
                         <div className="flex justify-between">
-                          <span className="text-gray-600">Limite Mensal:</span>
-                          <span>{formatCurrency(account.monthlyLimit)}</span>
+                          <span className="text-gray-700">Limite Mensal:</span>
+                          <span className="text-gray-900">{formatCurrency(account.monthlyLimit)}</span>
                         </div>
                       </div>
                     )}
@@ -532,7 +532,7 @@ export default function AccountsPage() {
               <div className="flex flex-col sm:flex-row gap-4 mb-6">
                 <div className="flex-1">
                   <div className="relative">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 w-4 h-4" />
                     <input
                       type="text"
                       placeholder="Buscar transações..."
@@ -577,7 +577,7 @@ export default function AccountsPage() {
                       </div>
                       <div>
                         <p className="font-medium text-gray-900">{transaction.description}</p>
-                        <div className="flex items-center space-x-2 text-sm text-gray-600">
+                        <div className="flex items-center space-x-2 text-sm text-gray-700">
                           <span>{transaction.category}</span>
                           <span>•</span>
                           <span>{formatDate(transaction.date)}</span>
@@ -606,7 +606,7 @@ export default function AccountsPage() {
               {filteredTransactions.length === 0 && (
                 <div className="text-center py-8">
                   <AlertCircle className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-600">Nenhuma transação encontrada</p>
+                  <p className="text-gray-700">Nenhuma transação encontrada</p>
                 </div>
               )}
             </div>

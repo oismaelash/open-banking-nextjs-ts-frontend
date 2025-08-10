@@ -254,7 +254,7 @@ export default function PIXPage() {
           <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4 animate-pulse">
             <Building2 className="w-8 h-8 text-white" />
           </div>
-          <p className="text-gray-600">Carregando...</p>
+          <p className="text-gray-700">Carregando...</p>
         </div>
       </div>
     );
@@ -272,26 +272,26 @@ export default function PIXPage() {
               <h2 className="text-2xl font-bold text-gray-900 mb-4">
                 PIX Enviado com Sucesso!
               </h2>
-              <p className="text-gray-600 mb-6">
+              <p className="text-gray-700 mb-6">
                 Seu pagamento PIX foi processado e enviado com sucesso.
               </p>
               
               <div className="bg-gray-50 rounded-xl p-6 mb-6">
                 <div className="space-y-3">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Destinatário:</span>
+                    <span className="text-gray-700">Destinatário:</span>
                     <span className="font-semibold">{formData.recipientName}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Valor:</span>
+                    <span className="text-gray-700">Valor:</span>
                     <span className="font-semibold text-green-600">{formatCurrency(parseFloat(formData.amount))}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Data/Hora:</span>
+                    <span className="text-gray-700">Data/Hora:</span>
                     <span className="font-semibold">{new Date().toLocaleString('pt-BR')}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">ID da Transação:</span>
+                    <span className="text-gray-700">ID da Transação:</span>
                     <span className="font-mono text-sm">PIX{Date.now()}</span>
                   </div>
                 </div>
@@ -338,10 +338,10 @@ export default function PIXPage() {
           <div className="flex items-center h-16">
             <button
               onClick={() => router.push('/dashboard')}
-              className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 transition-colors"
+              className="flex items-center space-x-2 text-gray-700 hover:text-gray-900 transition-colors font-medium"
             >
-              <ArrowLeft className="w-5 h-5" />
-              <span>Voltar</span>
+              <ArrowLeft className="w-5 h-5 text-gray-700" />
+              <span className="text-gray-700">Voltar</span>
             </button>
             <div className="ml-6 flex items-center space-x-3">
               <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center">
@@ -381,11 +381,11 @@ export default function PIXPage() {
                         onClick={() => handlePIXKeyTypeChange(type)}
                         className={`p-3 rounded-xl border-2 transition-colors ${
                           formData.pixKeyType === type
-                            ? 'border-green-600 bg-green-50 text-green-700'
-                            : 'border-gray-200 hover:border-gray-300'
+                            ? 'border-green-600 bg-green-50 text-green-800'
+                            : 'border-gray-200 hover:border-gray-300 text-gray-800'
                         }`}
                       >
-                        <div className="flex flex-col items-center space-y-1">
+                        <div className="flex flex-col items-center space-y-1 text-gray-800">
                           {icon}
                           <span className="text-xs font-medium">{label}</span>
                         </div>
@@ -401,7 +401,7 @@ export default function PIXPage() {
                   </label>
                   <div className="flex space-x-3">
                     <div className="flex-1 relative">
-                      <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                      <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
                         {getPIXKeyIcon(formData.pixKeyType)}
                       </div>
                       <input
@@ -409,7 +409,7 @@ export default function PIXPage() {
                         value={formData.pixKey}
                         onChange={(e) => setFormData(prev => ({ ...prev, pixKey: e.target.value }))}
                         placeholder={getPIXKeyPlaceholder(formData.pixKeyType)}
-                        className={`w-full pl-10 pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent ${
+                        className={`w-full pl-10 pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent placeholder-gray-600 ${
                           errors.pixKey ? 'border-red-500' : 'border-gray-300'
                         }`}
                       />
@@ -444,7 +444,7 @@ export default function PIXPage() {
                     value={formData.recipientName}
                     onChange={(e) => setFormData(prev => ({ ...prev, recipientName: e.target.value }))}
                     placeholder="Nome completo do destinatário"
-                    className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent ${
+                    className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent placeholder-gray-600 ${
                       errors.recipientName ? 'border-red-500' : 'border-gray-300'
                     }`}
                   />
@@ -459,16 +459,16 @@ export default function PIXPage() {
                     Valor
                   </label>
                   <div className="relative">
-                    <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                    <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
                       <DollarSign className="w-5 h-5" />
                     </div>
                     <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
                       <button
                         type="button"
                         onClick={() => setShowAmount(!showAmount)}
-                        className="text-gray-400 hover:text-gray-600"
+                        className="text-slate-400 hover:text-slate-600 text-gray-700"
                       >
-                        {showAmount ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                        {showAmount ? <EyeOff className="w-5 h-5 text-gray-700" /> : <Eye className="w-5 h-5 text-gray-700" />}
                       </button>
                     </div>
                     <input
@@ -478,7 +478,7 @@ export default function PIXPage() {
                       placeholder="0,00"
                       step="0.01"
                       min="0"
-                      className={`w-full pl-10 pr-12 py-3 border rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent ${
+                      className={`w-full pl-10 pr-12 py-3 border rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent placeholder-gray-600 ${
                         errors.amount ? 'border-red-500' : 'border-gray-300'
                       }`}
                     />
@@ -498,7 +498,7 @@ export default function PIXPage() {
                     value={formData.description}
                     onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
                     placeholder="Descrição do pagamento"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent placeholder-gray-600"
                   />
                 </div>
 
@@ -534,13 +534,13 @@ export default function PIXPage() {
                 >
                   {isProcessing ? (
                     <>
-                      <RefreshCw className="w-5 h-5 animate-spin" />
-                      <span>Processando...</span>
+                      <RefreshCw className="w-5 h-5 animate-spin text-white" />
+                      <span className="text-white">Processando...</span>
                     </>
                   ) : (
                     <>
-                      <QrCode className="w-5 h-5" />
-                      <span>Enviar PIX</span>
+                      <QrCode className="w-5 h-5 text-white" />
+                      <span className="text-white">Enviar PIX</span>
                     </>
                   )}
                 </button>
@@ -556,8 +556,8 @@ export default function PIXPage() {
               <div className="space-y-4">
                 <div>
                   <div className="flex justify-between text-sm mb-1">
-                    <span className="text-gray-600">Limite Total</span>
-                    <span className="font-semibold">{formatCurrency(dailyLimit)}</span>
+                    <span className="text-gray-800 font-medium">Limite Total</span>
+                    <span className="font-semibold text-gray-900">{formatCurrency(dailyLimit)}</span>
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-2">
                     <div 
@@ -567,11 +567,11 @@ export default function PIXPage() {
                   </div>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Utilizado</span>
-                  <span className="text-red-600">{formatCurrency(usedLimit)}</span>
+                  <span className="text-gray-800 font-medium">Utilizado</span>
+                  <span className="text-red-600 font-semibold">{formatCurrency(usedLimit)}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Disponível</span>
+                  <span className="text-gray-800 font-medium">Disponível</span>
                   <span className="text-green-600 font-semibold">{formatCurrency(remainingLimit)}</span>
                 </div>
               </div>
@@ -583,15 +583,15 @@ export default function PIXPage() {
               <div className="space-y-3">
                 <div className="flex items-center space-x-3">
                   <Shield className="w-5 h-5 text-green-600" />
-                  <span className="text-sm text-gray-700">Autenticação biométrica</span>
+                  <span className="text-sm text-gray-800 font-medium">Autenticação biométrica</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Shield className="w-5 h-5 text-green-600" />
-                  <span className="text-sm text-gray-700">Criptografia SSL</span>
+                  <span className="text-sm text-gray-800 font-medium">Criptografia SSL</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Shield className="w-5 h-5 text-green-600" />
-                  <span className="text-sm text-gray-700">Monitoramento 24h</span>
+                  <span className="text-sm text-gray-800 font-medium">Monitoramento 24h</span>
                 </div>
               </div>
             </div>
@@ -605,15 +605,15 @@ export default function PIXPage() {
                   className="w-full flex items-center space-x-3 p-3 text-left hover:bg-gray-50 rounded-lg transition-colors"
                 >
                   <QrCode className="w-5 h-5 text-blue-600" />
-                  <span className="text-sm">Gerar QR Code</span>
+                  <span className="text-sm text-gray-900 font-medium">Gerar QR Code</span>
                 </button>
                 <button className="w-full flex items-center space-x-3 p-3 text-left hover:bg-gray-50 rounded-lg transition-colors">
                   <Download className="w-5 h-5 text-green-600" />
-                  <span className="text-sm">Histórico PIX</span>
+                  <span className="text-sm text-gray-900 font-medium">Histórico PIX</span>
                 </button>
                 <button className="w-full flex items-center space-x-3 p-3 text-left hover:bg-gray-50 rounded-lg transition-colors">
                   <Share2 className="w-5 h-5 text-purple-600" />
-                  <span className="text-sm">Compartilhar</span>
+                  <span className="text-sm text-gray-900 font-medium">Compartilhar</span>
                 </button>
               </div>
             </div>
@@ -628,7 +628,7 @@ export default function PIXPage() {
                 <h3 className="text-lg font-semibold text-gray-900">Contatos PIX</h3>
                 <button
                   onClick={() => setShowContacts(false)}
-                  className="text-gray-400 hover:text-gray-600"
+                  className="text-slate-400 hover:text-slate-600"
                 >
                   <XCircle className="w-6 h-6" />
                 </button>
@@ -645,9 +645,9 @@ export default function PIXPage() {
                     </div>
                     <div className="flex-1">
                       <p className="font-medium text-gray-900">{contact.name}</p>
-                      <p className="text-sm text-gray-600">{contact.value}</p>
+                      <p className="text-sm text-gray-700">{contact.value}</p>
                     </div>
-                    <div className="text-xs text-gray-500">{contact.bank}</div>
+                    <div className="text-xs text-gray-600">{contact.bank}</div>
                   </button>
                 ))}
               </div>
@@ -663,15 +663,15 @@ export default function PIXPage() {
                 <h3 className="text-lg font-semibold text-gray-900">Escanear QR Code</h3>
                 <button
                   onClick={() => setShowQRScanner(false)}
-                  className="text-gray-400 hover:text-gray-600"
+                  className="text-slate-400 hover:text-slate-600"
                 >
                   <XCircle className="w-6 h-6" />
                 </button>
               </div>
               <div className="bg-gray-100 rounded-lg h-64 flex items-center justify-center">
                 <div className="text-center">
-                  <Camera className="w-12 h-12 text-gray-400 mx-auto mb-2" />
-                  <p className="text-gray-600">Funcionalidade de câmera em desenvolvimento</p>
+                  <Camera className="w-12 h-12 text-gray-500 mx-auto mb-2" />
+                  <p className="text-gray-700">Funcionalidade de câmera em desenvolvimento</p>
                 </div>
               </div>
             </div>
@@ -686,15 +686,15 @@ export default function PIXPage() {
                 <h3 className="text-lg font-semibold text-gray-900">Gerar QR Code</h3>
                 <button
                   onClick={() => setShowQRGenerator(false)}
-                  className="text-gray-400 hover:text-gray-600"
+                  className="text-slate-400 hover:text-slate-600"
                 >
                   <XCircle className="w-6 h-6" />
                 </button>
               </div>
               <div className="bg-gray-100 rounded-lg h-64 flex items-center justify-center">
                 <div className="text-center">
-                  <QrCode className="w-12 h-12 text-gray-400 mx-auto mb-2" />
-                  <p className="text-gray-600">QR Code será gerado aqui</p>
+                  <QrCode className="w-12 h-12 text-gray-500 mx-auto mb-2" />
+                  <p className="text-gray-700">QR Code será gerado aqui</p>
                 </div>
               </div>
             </div>

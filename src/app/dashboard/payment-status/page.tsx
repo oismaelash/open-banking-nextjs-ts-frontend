@@ -278,7 +278,7 @@ export default function PaymentStatusPage() {
           <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4 animate-pulse">
             <Building2 className="w-8 h-8 text-white" />
           </div>
-          <p className="text-gray-600">Carregando status do pagamento...</p>
+          <p className="text-gray-700">Carregando status do pagamento...</p>
         </div>
       </div>
     );
@@ -293,7 +293,7 @@ export default function PaymentStatusPage() {
             <h2 className="text-2xl font-bold text-gray-900 mb-4">
               Pagamento não encontrado
             </h2>
-            <p className="text-gray-600 mb-6">
+            <p className="text-gray-700 mb-6">
               O pagamento solicitado não foi encontrado ou não existe.
             </p>
             <button
@@ -316,10 +316,10 @@ export default function PaymentStatusPage() {
           <div className="flex items-center h-16">
             <button
               onClick={() => router.push('/dashboard')}
-              className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 transition-colors"
+              className="flex items-center space-x-2 text-gray-700 hover:text-gray-900 transition-colors font-medium"
             >
-              <ArrowLeft className="w-5 h-5" />
-              <span>Voltar</span>
+              <ArrowLeft className="w-5 h-5 text-gray-700" />
+              <span className="text-gray-700">Voltar</span>
             </button>
             <div className="ml-6 flex items-center space-x-3">
               <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center">
@@ -342,7 +342,7 @@ export default function PaymentStatusPage() {
                 <h2 className="text-2xl font-bold text-gray-900">
                   {getStatusText(paymentStatus.status)}
                 </h2>
-                <p className="text-gray-600">ID: {paymentStatus.id}</p>
+                <p className="text-gray-700">ID: {paymentStatus.id}</p>
               </div>
             </div>
             <span className={`px-4 py-2 rounded-full text-sm font-medium ${getStatusColor(paymentStatus.status)}`}>
@@ -354,20 +354,20 @@ export default function PaymentStatusPage() {
           <div className="bg-gray-50 rounded-xl p-6 mb-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Valor Transferido</p>
+                <p className="text-sm text-gray-700">Valor Transferido</p>
                 <p className="text-3xl font-bold text-gray-900">
                   {showAmount ? formatCurrency(paymentStatus.amount) : '••••••'}
                 </p>
               </div>
               <button
                 onClick={() => setShowAmount(!showAmount)}
-                className="p-2 text-gray-600 hover:text-gray-900 transition-colors"
+                className="p-2 text-slate-600 hover:text-slate-900 transition-colors"
               >
                 {showAmount ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
               </button>
             </div>
             {paymentStatus.fee > 0 && (
-              <div className="mt-2 text-sm text-gray-600">
+              <div className="mt-2 text-sm text-gray-700">
                 Taxa: {formatCurrency(paymentStatus.fee)}
               </div>
             )}
@@ -384,7 +384,7 @@ export default function PaymentStatusPage() {
             </button>
             <button
               onClick={() => copyToClipboard(paymentStatus.id)}
-              className="flex items-center space-x-2 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
+              className="flex items-center space-x-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
             >
               <Copy className="w-4 h-4" />
               <span>Copiar ID</span>
@@ -416,37 +416,37 @@ export default function PaymentStatusPage() {
               
               <div className="space-y-4">
                 <div className="flex justify-between py-3 border-b border-gray-100">
-                  <span className="text-gray-600">Destinatário</span>
-                  <span className="font-semibold">{paymentStatus.recipientName}</span>
+                  <span className="text-gray-700">Destinatário</span>
+                  <span className="font-semibold text-gray-900">{paymentStatus.recipientName}</span>
                 </div>
                 <div className="flex justify-between py-3 border-b border-gray-100">
-                  <span className="text-gray-600">Chave PIX</span>
-                  <span className="font-semibold">{paymentStatus.pixKey}</span>
+                  <span className="text-gray-700">Chave PIX</span>
+                  <span className="font-semibold text-gray-900">{paymentStatus.pixKey}</span>
                 </div>
                 <div className="flex justify-between py-3 border-b border-gray-100">
-                  <span className="text-gray-600">Tipo de Chave</span>
-                  <span className="font-semibold capitalize">{paymentStatus.pixKeyType}</span>
+                  <span className="text-gray-700">Tipo de Chave</span>
+                  <span className="font-semibold text-gray-900 capitalize">{paymentStatus.pixKeyType}</span>
                 </div>
                 <div className="flex justify-between py-3 border-b border-gray-100">
-                  <span className="text-gray-600">Descrição</span>
-                  <span className="font-semibold">{paymentStatus.description}</span>
+                  <span className="text-gray-700">Descrição</span>
+                  <span className="font-semibold text-gray-900">{paymentStatus.description}</span>
                 </div>
                 <div className="flex justify-between py-3 border-b border-gray-100">
-                  <span className="text-gray-600">Categoria</span>
-                  <span className="font-semibold">{paymentStatus.category}</span>
+                  <span className="text-gray-700">Categoria</span>
+                  <span className="font-semibold text-gray-900">{paymentStatus.category}</span>
                 </div>
                 <div className="flex justify-between py-3 border-b border-gray-100">
-                  <span className="text-gray-600">Banco</span>
-                  <span className="font-semibold">{paymentStatus.bank}</span>
+                  <span className="text-gray-700">Banco</span>
+                  <span className="font-semibold text-gray-900">{paymentStatus.bank}</span>
                 </div>
                 <div className="flex justify-between py-3">
-                  <span className="text-gray-600">Data de Início</span>
-                  <span className="font-semibold">{formatDate(paymentStatus.initiatedAt)}</span>
+                  <span className="text-gray-700">Data de Início</span>
+                  <span className="font-semibold text-gray-900">{formatDate(paymentStatus.initiatedAt)}</span>
                 </div>
                 {paymentStatus.completedAt && (
                   <div className="flex justify-between py-3 border-t border-gray-100">
-                    <span className="text-gray-600">Data de Conclusão</span>
-                    <span className="font-semibold">{formatDate(paymentStatus.completedAt)}</span>
+                    <span className="text-gray-700">Data de Conclusão</span>
+                    <span className="font-semibold text-gray-900">{formatDate(paymentStatus.completedAt)}</span>
                   </div>
                 )}
               </div>
@@ -473,9 +473,9 @@ export default function PaymentStatusPage() {
                     </div>
                     <div className="flex-1">
                       <h4 className="font-semibold text-gray-900">{step.title}</h4>
-                      <p className="text-gray-600">{step.description}</p>
+                      <p className="text-gray-700">{step.description}</p>
                       {step.timestamp && (
-                        <p className="text-sm text-gray-500 mt-1">{formatDate(step.timestamp)}</p>
+                        <p className="text-sm text-gray-600 mt-1">{formatDate(step.timestamp)}</p>
                       )}
                     </div>
                   </div>
@@ -492,7 +492,7 @@ export default function PaymentStatusPage() {
                 <h3 className="text-lg font-semibold text-gray-900">Informações de Segurança</h3>
                 <button
                   onClick={() => setShowSecurityDetails(!showSecurityDetails)}
-                  className="text-gray-400 hover:text-gray-600"
+                  className="text-slate-400 hover:text-slate-600"
                 >
                   {showSecurityDetails ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
                 </button>
@@ -512,7 +512,7 @@ export default function PaymentStatusPage() {
                     <Shield className="w-5 h-5 text-green-600" />
                     <span className="text-sm text-gray-700">Monitoramento 24h</span>
                   </div>
-                  <div className="text-xs text-gray-500 mt-4">
+                  <div className="text-xs text-gray-600 mt-4">
                     <p>IP: 192.168.1.100</p>
                     <p>Dispositivo: iPhone 15</p>
                     <p>Localização: São Paulo, SP</p>
@@ -527,15 +527,15 @@ export default function PaymentStatusPage() {
               <div className="space-y-3">
                 <button className="w-full flex items-center space-x-3 p-3 text-left hover:bg-gray-50 rounded-lg transition-colors">
                   <MessageCircle className="w-5 h-5 text-blue-600" />
-                  <span className="text-sm">Chat ao Vivo</span>
+                  <span className="text-sm text-gray-900 font-medium">Chat ao Vivo</span>
                 </button>
                 <button className="w-full flex items-center space-x-3 p-3 text-left hover:bg-gray-50 rounded-lg transition-colors">
                   <Phone className="w-5 h-5 text-green-600" />
-                  <span className="text-sm">0800 123 4567</span>
+                  <span className="text-sm text-gray-900 font-medium">0800 123 4567</span>
                 </button>
                 <button className="w-full flex items-center space-x-3 p-3 text-left hover:bg-gray-50 rounded-lg transition-colors">
                   <Mail className="w-5 h-5 text-purple-600" />
-                  <span className="text-sm">suporte@banco.com</span>
+                  <span className="text-sm text-gray-900 font-medium">suporte@banco.com</span>
                 </button>
               </div>
             </div>
@@ -549,15 +549,15 @@ export default function PaymentStatusPage() {
                   className="w-full flex items-center space-x-3 p-3 text-left hover:bg-gray-50 rounded-lg transition-colors"
                 >
                   <FileText className="w-5 h-5 text-blue-600" />
-                  <span className="text-sm">Comprovante PDF</span>
+                  <span className="text-sm text-gray-900 font-medium">Comprovante PDF</span>
                 </button>
                 <button className="w-full flex items-center space-x-3 p-3 text-left hover:bg-gray-50 rounded-lg transition-colors">
                   <Printer className="w-5 h-5 text-green-600" />
-                  <span className="text-sm">Imprimir</span>
+                  <span className="text-sm text-gray-900 font-medium">Imprimir</span>
                 </button>
                 <button className="w-full flex items-center space-x-3 p-3 text-left hover:bg-gray-50 rounded-lg transition-colors">
                   <QrCode className="w-5 h-5 text-purple-600" />
-                  <span className="text-sm">QR Code do Comprovante</span>
+                  <span className="text-sm text-gray-900 font-medium">QR Code do Comprovante</span>
                 </button>
               </div>
             </div>
@@ -573,7 +573,7 @@ export default function PaymentStatusPage() {
               <h3 className="text-lg font-semibold text-gray-900">Comprovante de Pagamento</h3>
               <button
                 onClick={() => setShowReceipt(false)}
-                className="text-gray-400 hover:text-gray-600"
+                className="text-slate-400 hover:text-slate-600"
               >
                 <XCircle className="w-6 h-6" />
               </button>
@@ -582,20 +582,20 @@ export default function PaymentStatusPage() {
               <div className="bg-gray-50 rounded-lg p-4">
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">ID:</span>
-                    <span className="font-mono">{paymentStatus.id}</span>
+                    <span className="text-gray-700">ID:</span>
+                    <span className="font-mono text-gray-900">{paymentStatus.id}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Valor:</span>
-                    <span className="font-semibold">{formatCurrency(paymentStatus.amount)}</span>
+                    <span className="text-gray-700">Valor:</span>
+                    <span className="font-semibold text-gray-900">{formatCurrency(paymentStatus.amount)}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Destinatário:</span>
-                    <span>{paymentStatus.recipientName}</span>
+                    <span className="text-gray-700">Destinatário:</span>
+                    <span className="text-gray-900">{paymentStatus.recipientName}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Data:</span>
-                    <span>{paymentStatus.completedAt ? formatDate(paymentStatus.completedAt) : formatDate(paymentStatus.initiatedAt)}</span>
+                    <span className="text-gray-700">Data:</span>
+                    <span className="text-gray-900">{paymentStatus.completedAt ? formatDate(paymentStatus.completedAt) : formatDate(paymentStatus.initiatedAt)}</span>
                   </div>
                 </div>
               </div>
@@ -608,7 +608,7 @@ export default function PaymentStatusPage() {
                 </button>
                 <button
                   onClick={() => copyToClipboard(paymentStatus.id)}
-                  className="flex-1 bg-gray-600 text-white py-2 px-4 rounded-lg hover:bg-gray-700 transition-colors"
+                  className="flex-1 bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 transition-colors"
                 >
                   Copiar ID
                 </button>
@@ -626,35 +626,35 @@ export default function PaymentStatusPage() {
               <h3 className="text-lg font-semibold text-gray-900">Suporte</h3>
               <button
                 onClick={() => setShowSupport(false)}
-                className="text-gray-400 hover:text-gray-600"
+                className="text-slate-400 hover:text-slate-600"
               >
                 <XCircle className="w-6 h-6" />
               </button>
             </div>
             <div className="space-y-4">
-              <p className="text-gray-600">
+              <p className="text-gray-700">
                 Seu pagamento falhou. Entre em contato conosco para obter ajuda.
               </p>
               <div className="space-y-3">
                 <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
                   <Phone className="w-5 h-5 text-green-600" />
                   <div>
-                    <p className="font-medium">Telefone</p>
-                    <p className="text-sm text-gray-600">0800 123 4567</p>
+                    <p className="font-medium text-gray-900">Telefone</p>
+                    <p className="text-sm text-gray-700">0800 123 4567</p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
                   <Mail className="w-5 h-5 text-blue-600" />
                   <div>
-                    <p className="font-medium">E-mail</p>
-                    <p className="text-sm text-gray-600">suporte@banco.com</p>
+                    <p className="font-medium text-gray-900">E-mail</p>
+                    <p className="text-sm text-gray-700">suporte@banco.com</p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
                   <MessageCircle className="w-5 h-5 text-purple-600" />
                   <div>
-                    <p className="font-medium">Chat</p>
-                    <p className="text-sm text-gray-600">Disponível 24h</p>
+                    <p className="font-medium text-gray-900">Chat</p>
+                    <p className="text-sm text-gray-700">Disponível 24h</p>
                   </div>
                 </div>
               </div>

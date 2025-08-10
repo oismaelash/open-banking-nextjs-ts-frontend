@@ -26,7 +26,8 @@ import {
   AlertCircle,
   CheckCircle,
   XCircle,
-  RefreshCw
+  RefreshCw,
+  Copy
 } from 'lucide-react';
 
 // Types
@@ -252,7 +253,7 @@ export default function DashboardPage() {
           <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4 animate-pulse">
             <Building2 className="w-8 h-8 text-white" />
           </div>
-          <p className="text-gray-600">Carregando seu dashboard...</p>
+          <p className="text-gray-700">Carregando seu dashboard...</p>
         </div>
       </div>
     );
@@ -271,10 +272,10 @@ export default function DashboardPage() {
               <h1 className="text-xl font-bold text-gray-900">Open Banking Dashboard</h1>
             </div>
             <div className="flex items-center space-x-4">
-              <button className="p-2 text-gray-600 hover:text-gray-900 transition-colors">
+              <button className="p-2 text-gray-700 hover:text-gray-900 transition-colors">
                 <Bell className="w-5 h-5" />
               </button>
-              <button className="p-2 text-gray-600 hover:text-gray-900 transition-colors">
+              <button className="p-2 text-gray-700 hover:text-gray-900 transition-colors">
                 <Settings className="w-5 h-5" />
               </button>
               <button
@@ -283,7 +284,7 @@ export default function DashboardPage() {
                   localStorage.removeItem('consentData');
                   router.push('/');
                 }}
-                className="text-gray-600 hover:text-gray-900 transition-colors"
+                className="text-gray-700 hover:text-gray-900 transition-colors font-medium"
               >
                 Sair
               </button>
@@ -299,7 +300,7 @@ export default function DashboardPage() {
           <h2 className="text-3xl font-bold text-gray-900 mb-2">
             Olá! Bem-vindo ao seu Dashboard
           </h2>
-          <p className="text-gray-600">
+          <p className="text-gray-700">
             Gerencie suas contas, visualize transações e realize pagamentos PIX
           </p>
         </div>
@@ -313,7 +314,7 @@ export default function DashboardPage() {
                   <DollarSign className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <p className="text-sm text-gray-600">Saldo Total</p>
+                  <p className="text-sm text-gray-700">Saldo Total</p>
                   <p className="text-2xl font-bold text-gray-900">
                     {showBalances ? formatCurrency(totalBalance) : '••••••'}
                   </p>
@@ -321,13 +322,13 @@ export default function DashboardPage() {
               </div>
               <button
                 onClick={() => setShowBalances(!showBalances)}
-                className="p-2 text-gray-600 hover:text-gray-900 transition-colors"
+                className="p-2 text-slate-600 hover:text-slate-900 transition-colors"
               >
                 {showBalances ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
               </button>
             </div>
             <div className="flex items-center justify-between text-sm">
-              <span className="text-gray-600">Disponível:</span>
+              <span className="text-gray-700">Disponível:</span>
               <span className="font-semibold text-green-600">
                 {showBalances ? formatCurrency(totalAvailable) : '••••••'}
               </span>
@@ -340,11 +341,11 @@ export default function DashboardPage() {
                 <Wallet className="w-6 h-6 text-white" />
               </div>
               <div>
-                <p className="text-sm text-gray-600">Contas Ativas</p>
+                <p className="text-sm text-gray-700">Contas Ativas</p>
                 <p className="text-2xl font-bold text-gray-900">{accounts.length}</p>
               </div>
             </div>
-            <div className="text-sm text-gray-600">
+            <div className="text-sm text-gray-700">
               {accounts.filter(a => a.status === 'active').length} contas disponíveis
             </div>
           </div>
@@ -355,7 +356,7 @@ export default function DashboardPage() {
                 <BarChart3 className="w-6 h-6 text-white" />
               </div>
               <div>
-                <p className="text-sm text-gray-600">Transações Hoje</p>
+                <p className="text-sm text-gray-700">Transações Hoje</p>
                 <p className="text-2xl font-bold text-gray-900">
                   {transactions.filter(t => 
                     new Date(t.date).toDateString() === new Date().toDateString()
@@ -363,7 +364,7 @@ export default function DashboardPage() {
                 </p>
               </div>
             </div>
-            <div className="text-sm text-gray-600">
+            <div className="text-sm text-gray-700">
               Última atualização: {new Date().toLocaleTimeString('pt-BR')}
             </div>
           </div>
@@ -419,7 +420,7 @@ export default function DashboardPage() {
                         </div>
                         <div>
                           <p className="font-medium text-gray-900">{account.name}</p>
-                          <p className="text-sm text-gray-600">{account.number}</p>
+                          <p className="text-sm text-gray-700">{account.number}</p>
                         </div>
                       </div>
                       <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(account.status)}`}>
@@ -429,13 +430,13 @@ export default function DashboardPage() {
                     
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-sm text-gray-600">Saldo</p>
+                        <p className="text-sm text-gray-700">Saldo</p>
                         <p className="font-semibold text-gray-900">
                           {showBalances ? formatCurrency(account.balance) : '••••••'}
                         </p>
                       </div>
                       <div className="text-right">
-                        <p className="text-sm text-gray-600">Disponível</p>
+                        <p className="text-sm text-gray-700">Disponível</p>
                         <p className="font-semibold text-green-600">
                           {showBalances ? formatCurrency(account.availableBalance) : '••••••'}
                         </p>
@@ -443,7 +444,7 @@ export default function DashboardPage() {
                     </div>
                     
                     <div className="mt-3 pt-3 border-t border-gray-100">
-                      <p className="text-xs text-gray-500">{account.bank}</p>
+                      <p className="text-xs text-gray-600 font-medium">{account.bank}</p>
                     </div>
                   </div>
                 ))}
@@ -465,7 +466,7 @@ export default function DashboardPage() {
               <div className="flex flex-col sm:flex-row gap-4 mb-6">
                 <div className="flex-1">
                   <div className="relative">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 w-4 h-4" />
                     <input
                       type="text"
                       placeholder="Buscar transações..."
@@ -510,7 +511,7 @@ export default function DashboardPage() {
                       </div>
                       <div>
                         <p className="font-medium text-gray-900">{transaction.description}</p>
-                        <div className="flex items-center space-x-2 text-sm text-gray-600">
+                        <div className="flex items-center space-x-2 text-sm text-gray-700">
                           <span>{transaction.category}</span>
                           <span>•</span>
                           <span>{formatDate(transaction.date)}</span>
@@ -539,7 +540,7 @@ export default function DashboardPage() {
               {filteredTransactions.length === 0 && (
                 <div className="text-center py-8">
                   <AlertCircle className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-600">Nenhuma transação encontrada</p>
+                  <p className="text-gray-700">Nenhuma transação encontrada</p>
                 </div>
               )}
             </div>
@@ -552,8 +553,8 @@ export default function DashboardPage() {
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-lg font-semibold text-gray-900">Evolução do Saldo</h3>
               <div className="flex items-center space-x-2">
-                <button className="p-2 text-gray-600 hover:text-gray-900 transition-colors">
-                  <RefreshCw className="w-4 h-4" />
+                <button className="p-2 text-slate-600 hover:text-slate-900 transition-colors">
+                  <RefreshCw className="w-4 h-4 text-gray-700" />
                 </button>
                 <select className="px-3 py-1 border border-gray-300 rounded-lg text-sm">
                   <option value="7d">7 dias</option>
@@ -571,13 +572,13 @@ export default function DashboardPage() {
                     className="bg-blue-600 rounded-t w-8 transition-all hover:bg-blue-700"
                     style={{ height: `${(data.balance / Math.max(...balanceData.map(d => d.balance))) * 200}px` }}
                   ></div>
-                  <span className="text-xs text-gray-600">{new Date(data.date).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })}</span>
+                  <span className="text-xs text-gray-700">{new Date(data.date).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })}</span>
                 </div>
               ))}
             </div>
             
             <div className="mt-4 text-center">
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-gray-700">
                 Saldo atual: <span className="font-semibold text-gray-900">{formatCurrency(totalBalance)}</span>
               </p>
             </div>
@@ -593,7 +594,7 @@ export default function DashboardPage() {
               </div>
               <h3 className="text-lg font-semibold text-gray-900">Consent Management</h3>
             </div>
-            <p className="text-gray-600 mb-4">
+            <p className="text-gray-700 mb-4">
               Manage your data sharing permissions
             </p>
             <button 

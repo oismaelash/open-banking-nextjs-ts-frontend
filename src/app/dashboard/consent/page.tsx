@@ -279,7 +279,7 @@ export default function ConsentPage() {
           <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4 animate-pulse">
             <Building2 className="w-8 h-8 text-white" />
           </div>
-          <p className="text-gray-600">Carregando configurações de consentimento...</p>
+          <p className="text-gray-700">Carregando configurações de consentimento...</p>
         </div>
       </div>
     );
@@ -293,10 +293,10 @@ export default function ConsentPage() {
           <div className="flex items-center h-16">
             <button
               onClick={() => router.push('/dashboard')}
-              className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 transition-colors"
+              className="flex items-center space-x-2 text-gray-700 hover:text-gray-900 transition-colors font-medium"
             >
-              <ArrowLeft className="w-5 h-5" />
-              <span>Voltar</span>
+              <ArrowLeft className="w-5 h-5 text-gray-700" />
+              <span className="text-gray-700">Voltar</span>
             </button>
             <div className="ml-6 flex items-center space-x-3">
               <div className="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center">
@@ -311,68 +311,44 @@ export default function ConsentPage() {
       {/* Main Content */}
       <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Overview Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
           <div className="bg-white rounded-2xl shadow-lg p-6">
-            <div className="flex items-center space-x-3 mb-4">
-              <div className="w-10 h-10 bg-green-600 rounded-lg flex items-center justify-center">
-                <CheckCircle className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <p className="text-sm text-gray-600">Permissões Ativas</p>
-                <p className="text-2xl font-bold text-gray-900">{grantedScopes.length}</p>
-              </div>
-            </div>
-            <div className="text-sm text-gray-600">
-              de {consentScopes.length} total
+            <p className="text-sm text-gray-700">Permissões Ativas</p>
+            <p className="text-2xl font-bold text-gray-900">
+              {consentScopes.filter(scope => scope.isGranted).length}
+            </p>
+            <div className="text-sm text-gray-700">
+              {consentScopes.filter(scope => scope.isGranted && !scope.isRequired).length} opcionais
             </div>
           </div>
 
           <div className="bg-white rounded-2xl shadow-lg p-6">
-            <div className="flex items-center space-x-3 mb-4">
-              <div className="w-10 h-10 bg-red-600 rounded-lg flex items-center justify-center">
-                <XCircle className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <p className="text-sm text-gray-600">Permissões Revogadas</p>
-                <p className="text-2xl font-bold text-gray-900">{revokedScopes.length}</p>
-              </div>
-            </div>
-            <div className="text-sm text-gray-600">
-              não ativas
+            <p className="text-sm text-gray-700">Permissões Revogadas</p>
+            <p className="text-2xl font-bold text-gray-900">
+              {consentScopes.filter(scope => !scope.isGranted).length}
+            </p>
+            <div className="text-sm text-gray-700">
+              {consentScopes.filter(scope => !scope.isGranted && !scope.isRequired).length} opcionais
             </div>
           </div>
 
           <div className="bg-white rounded-2xl shadow-lg p-6">
-            <div className="flex items-center space-x-3 mb-4">
-              <div className="w-10 h-10 bg-yellow-600 rounded-lg flex items-center justify-center">
-                <AlertTriangle className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <p className="text-sm text-gray-600">Alto Risco</p>
-                <p className="text-2xl font-bold text-gray-900">
-                  {consentScopes.filter(s => s.riskLevel === 'high' && s.isGranted).length}
-                </p>
-              </div>
-            </div>
-            <div className="text-sm text-gray-600">
-              permissões ativas
+            <p className="text-sm text-gray-700">Alto Risco</p>
+            <p className="text-2xl font-bold text-gray-900">
+              {consentScopes.filter(scope => scope.riskLevel === 'high').length}
+            </p>
+            <div className="text-sm text-gray-700">
+              {consentScopes.filter(scope => scope.riskLevel === 'high' && scope.isGranted).length} ativas
             </div>
           </div>
 
           <div className="bg-white rounded-2xl shadow-lg p-6">
-            <div className="flex items-center space-x-3 mb-4">
-              <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
-                <Clock className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <p className="text-sm text-gray-600">Última Atualização</p>
-                <p className="text-lg font-bold text-gray-900">
-                  {formatDate(consentScopes[0]?.lastUpdated || new Date().toISOString()).split(' ')[0]}
-                </p>
-              </div>
-            </div>
-            <div className="text-sm text-gray-600">
-              {formatDate(consentScopes[0]?.lastUpdated || new Date().toISOString()).split(' ')[1]}
+            <p className="text-sm text-gray-700">Última Atualização</p>
+            <p className="text-2xl font-bold text-gray-900">
+              {new Date().toLocaleDateString('pt-BR')}
+            </p>
+            <div className="text-sm text-gray-700">
+              {new Date().toLocaleTimeString('pt-BR')}
             </div>
           </div>
         </div>
@@ -391,10 +367,10 @@ export default function ConsentPage() {
               </p>
               <button
                 onClick={() => setShowRiskInfo(!showRiskInfo)}
-                className="text-yellow-800 hover:text-yellow-900 font-medium flex items-center space-x-1"
+                className="text-yellow-900 hover:text-yellow-950 font-semibold flex items-center space-x-1 underline"
               >
-                <span>Saiba mais sobre segurança</span>
-                {showRiskInfo ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                <span className="text-gray-700">Saiba mais sobre segurança</span>
+                {showRiskInfo ? <ChevronUp className="w-4 h-4 text-gray-700" /> : <ChevronDown className="w-4 h-4 text-gray-700" />}
               </button>
               
               {showRiskInfo && (
@@ -431,12 +407,12 @@ export default function ConsentPage() {
                 <h3 className="text-lg font-semibold text-gray-900">
                   {selectedScopes.length} permissão{selectedScopes.length > 1 ? 'ões' : ''} selecionada{selectedScopes.length > 1 ? 's' : ''}
                 </h3>
-                <p className="text-gray-600">Revogar acesso às permissões selecionadas</p>
+                <p className="text-gray-700 font-medium">Revogar acesso às permissões selecionadas</p>
               </div>
               <div className="flex space-x-3">
                 <button
                   onClick={() => setSelectedScopes([])}
-                  className="px-4 py-2 text-gray-600 hover:text-gray-900 transition-colors"
+                  className="px-4 py-2 text-slate-600 hover:text-slate-900 transition-colors"
                 >
                   Cancelar
                 </button>
@@ -492,8 +468,8 @@ export default function ConsentPage() {
                             </span>
                           )}
                         </div>
-                        <p className="text-gray-600 text-sm mb-3">{scope.description}</p>
-                        <div className="flex items-center space-x-4 text-xs text-gray-500">
+                        <p className="text-gray-700 text-sm mb-3">{scope.description}</p>
+                        <div className="flex items-center space-x-4 text-xs text-gray-600">
                           <span>Última atualização: {formatDate(scope.lastUpdated)}</span>
                           <span>Categoria: {scope.category}</span>
                         </div>
@@ -529,7 +505,7 @@ export default function ConsentPage() {
                             </button>
                             <button
                               onClick={() => setEditingScope(null)}
-                              className="p-1 text-gray-400 hover:text-gray-600"
+                              className="p-1 text-gray-500 hover:text-gray-700"
                             >
                               <X className="w-4 h-4" />
                             </button>
@@ -546,9 +522,9 @@ export default function ConsentPage() {
                             {!scope.isRequired && (
                               <button
                                 onClick={() => handleScopeToggle(scope.id)}
-                                className="p-1 text-gray-400 hover:text-gray-600"
+                                className="p-1 text-slate-400 hover:text-slate-600"
                               >
-                                <Edit className="w-4 h-4" />
+                                <ChevronUp className="w-4 h-4" />
                               </button>
                             )}
                           </div>
@@ -593,15 +569,15 @@ export default function ConsentPage() {
               <div className="space-y-3">
                 <button className="w-full flex items-center space-x-3 p-3 text-left hover:bg-gray-50 rounded-lg transition-colors">
                   <Download className="w-5 h-5 text-blue-600" />
-                  <span className="text-sm">Exportar Dados</span>
+                  <span className="text-sm text-gray-900 font-medium">Exportar Dados</span>
                 </button>
                 <button className="w-full flex items-center space-x-3 p-3 text-left hover:bg-gray-50 rounded-lg transition-colors">
                   <FileText className="w-5 h-5 text-green-600" />
-                  <span className="text-sm">Política de Privacidade</span>
+                  <span className="text-sm text-gray-900 font-medium">Política de Privacidade</span>
                 </button>
                 <button className="w-full flex items-center space-x-3 p-3 text-left hover:bg-gray-50 rounded-lg transition-colors">
                   <Settings className="w-5 h-5 text-purple-600" />
-                  <span className="text-sm">Configurações Avançadas</span>
+                  <span className="text-sm text-gray-900 font-medium">Configurações Avançadas</span>
                 </button>
               </div>
             </div>
@@ -633,21 +609,21 @@ export default function ConsentPage() {
             <div className="bg-white rounded-2xl shadow-lg p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Aplicação Conectada</h3>
               <div className="space-y-3">
-                <div>
-                  <p className="text-sm text-gray-600">Nome da App</p>
-                  <p className="font-medium text-gray-900">Open Banking Demo</p>
+                <div className="flex justify-between py-3 border-b border-gray-100">
+                  <span className="text-gray-700">Nome da App</span>
+                  <span className="font-semibold text-gray-900">Open Banking App</span>
                 </div>
-                <div>
-                  <p className="text-sm text-gray-600">Desenvolvedor</p>
-                  <p className="font-medium text-gray-900">Banco Demo Ltda</p>
+                <div className="flex justify-between py-3 border-b border-gray-100">
+                  <span className="text-gray-700">Desenvolvedor</span>
+                  <span className="font-semibold text-gray-900">Open Banking Corp</span>
                 </div>
-                <div>
-                  <p className="text-sm text-gray-600">Data de Conexão</p>
-                  <p className="font-medium text-gray-900">15/01/2024</p>
+                <div className="flex justify-between py-3 border-b border-gray-100">
+                  <span className="text-gray-700">Data de Conexão</span>
+                  <span className="font-semibold text-gray-900">15/01/2024</span>
                 </div>
-                <div>
-                  <p className="text-sm text-gray-600">Último Acesso</p>
-                  <p className="font-medium text-gray-900">Hoje às 14:30</p>
+                <div className="flex justify-between py-3">
+                  <span className="text-gray-700">Último Acesso</span>
+                  <span className="font-semibold text-gray-900">15/01/2024, 14:30</span>
                 </div>
               </div>
             </div>
