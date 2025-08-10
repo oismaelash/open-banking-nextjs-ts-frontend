@@ -155,25 +155,23 @@ export function PasswordSecurityStep({ formData, updateFormData, onNext, onPrev,
         )}
 
         {/* Password Requirements */}
-        {password && (
-          <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
-            <h4 className="text-sm font-medium text-gray-900 mb-3">Password Requirements:</h4>
-            <div className="space-y-2">
-              {requirements.map((req, index) => (
-                <div key={index} className="flex items-center space-x-2">
-                  {req.met ? (
-                    <CheckCircle className="w-4 h-4 text-green-500" />
-                  ) : (
-                    <XCircle className="w-4 h-4 text-gray-400" />
-                  )}
-                  <span className={`text-sm ${req.met ? 'text-green-700' : 'text-gray-600'}`}>
-                    {req.label}
-                  </span>
-                </div>
-              ))}
-            </div>
+        <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+          <h4 className="text-sm font-medium text-gray-900 mb-3">Password Requirements:</h4>
+          <div className="space-y-2">
+            {requirements.map((req, index) => (
+              <div key={index} className="flex items-center space-x-2">
+                {req.met ? (
+                  <CheckCircle className="w-4 h-4 text-green-500" />
+                ) : (
+                  <XCircle className="w-4 h-4 text-gray-400" />
+                )}
+                <span className={`text-sm ${req.met ? 'text-green-700' : 'text-gray-600'}`}>
+                  {req.label}
+                </span>
+              </div>
+            ))}
           </div>
-        )}
+        </div>
 
         {/* Confirm Password */}
         <div>
