@@ -3,7 +3,8 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { MapPin, ArrowRight, ArrowLeft } from 'lucide-react';
+import { MapPin, ArrowRight, ArrowLeft, Search } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
 const addressInfoSchema = z.object({
   street: z.string().min(3, 'Street address must be at least 3 characters'),
@@ -18,6 +19,20 @@ const addressInfoSchema = z.object({
 });
 
 type AddressInfoFormData = z.infer<typeof addressInfoSchema>;
+
+interface ViaCepResponse {
+  cep: string;
+  logradouro: string;
+  complemento: string;
+  bairro: string;
+  localidade: string;
+  uf: string;
+  ibge: string;
+  gia: string;
+  ddd: string;
+  siafi: string;
+  erro?: boolean;
+}
 
 interface AddressInfoStepProps {
   formData: any;
@@ -34,11 +49,16 @@ const brazilianStates = [
 ];
 
 export function AddressInfoStep({ formData, updateFormData, onNext, onPrev, isLoading }: AddressInfoStepProps) {
+  const [isSearchingZipCode, setIsSearchingZipCode] = useState(false);
+  const [zipCodeError, setZipCodeError] = useState<string | null>(null);
+
   const {
     register,
     handleSubmit,
     formState: { errors, isValid },
     watch,
+    setValue,
+    trigger,
   } = useForm<AddressInfoFormData>({
     resolver: zodResolver(addressInfoSchema),
     defaultValues: {
@@ -59,9 +79,55 @@ export function AddressInfoStep({ formData, updateFormData, onNext, onPrev, isLo
     return `${numbers.slice(0, 5)}-${numbers.slice(5, 8)}`;
   };
 
+  const searchZipCode = async (zipCode: string) => {
+    if (zipCode.length !== 9) return;
+
+    setIsSearchingZipCode(true);
+    setZipCodeError(null);
+
+    try {
+      const cleanZipCode = zipCode.replace(/\D/g, '');
+      const response = await fetch(`https://viacep.com.br/ws/${cleanZipCode}/json/`);
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch ZIP code data');
+      }
+
+      const data: ViaCepResponse = await response.json();
+
+      if (data.erro) {
+        setZipCodeError('ZIP code not found. Please check and try again.');
+        return;
+      }
+
+      // Auto-fill the form fields
+      setValue('street', data.logradouro || '');
+      setValue('neighborhood', data.bairro || '');
+      setValue('city', data.localidade || '');
+      setValue('state', data.uf || '');
+      
+      // Trigger validation for the updated fields
+      await trigger(['street', 'neighborhood', 'city', 'state']);
+
+    } catch (error) {
+      console.error('Error searching ZIP code:', error);
+      setZipCodeError('Failed to search ZIP code. Please try again.');
+    } finally {
+      setIsSearchingZipCode(false);
+    }
+  };
+
   const handleZipCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const formatted = formatZipCode(e.target.value);
     e.target.value = formatted;
+    
+    // Clear previous errors
+    setZipCodeError(null);
+    
+    // Search when ZIP code is complete
+    if (formatted.length === 9) {
+      searchZipCode(formatted);
+    }
   };
 
   const onSubmit = (data: AddressInfoFormData) => {
@@ -85,6 +151,44 @@ export function AddressInfoStep({ formData, updateFormData, onNext, onPrev, isLo
       {/* Form */}
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* ZIP Code - Moved to top */}
+          <div className="md:col-span-2">
+            <label htmlFor="zipCode" className="block text-sm font-medium text-gray-700 mb-2">
+              ZIP Code * (Start here to auto-fill address)
+            </label>
+            <div className="relative">
+              <input
+                {...register('zipCode')}
+                type="text"
+                id="zipCode"
+                maxLength={9}
+                className={`w-full px-4 py-3 pr-12 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
+                  errors.zipCode || zipCodeError ? 'border-red-300' : 'border-gray-300'
+                }`}
+                placeholder="01234-567"
+                onChange={handleZipCodeChange}
+                aria-describedby={errors.zipCode || zipCodeError ? 'zipCode-error' : undefined}
+              />
+              <div className="absolute inset-y-0 right-0 flex items-center pr-3">
+                {isSearchingZipCode ? (
+                  <div className="w-5 h-5 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
+                ) : (
+                  <Search className="w-5 h-5 text-gray-400" />
+                )}
+              </div>
+            </div>
+            {(errors.zipCode || zipCodeError) && (
+              <p id="zipCode-error" className="mt-1 text-sm text-red-600">
+                {zipCodeError || errors.zipCode?.message}
+              </p>
+            )}
+            {!errors.zipCode && !zipCodeError && (
+              <p className="mt-1 text-sm text-gray-500">
+                Enter your ZIP code to automatically fill in your address
+              </p>
+            )}
+          </div>
+
           {/* Street */}
           <div className="md:col-span-2">
             <label htmlFor="street" className="block text-sm font-medium text-gray-700 mb-2">
@@ -210,30 +314,6 @@ export function AddressInfoStep({ formData, updateFormData, onNext, onPrev, isLo
             {errors.state && (
               <p id="state-error" className="mt-1 text-sm text-red-600">
                 {errors.state.message}
-              </p>
-            )}
-          </div>
-
-          {/* ZIP Code */}
-          <div className="md:col-span-2">
-            <label htmlFor="zipCode" className="block text-sm font-medium text-gray-700 mb-2">
-              ZIP Code *
-            </label>
-            <input
-              {...register('zipCode')}
-              type="text"
-              id="zipCode"
-              maxLength={9}
-              className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
-                errors.zipCode ? 'border-red-300' : 'border-gray-300'
-              }`}
-              placeholder="01234-567"
-              onChange={handleZipCodeChange}
-              aria-describedby={errors.zipCode ? 'zipCode-error' : undefined}
-            />
-            {errors.zipCode && (
-              <p id="zipCode-error" className="mt-1 text-sm text-red-600">
-                {errors.zipCode.message}
               </p>
             )}
           </div>
