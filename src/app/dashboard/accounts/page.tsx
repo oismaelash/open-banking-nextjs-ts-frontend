@@ -4,29 +4,31 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { 
   Building2, 
-  CreditCard, 
-  TrendingUp, 
-  ArrowRight, 
-  DollarSign, 
-  Wallet, 
+  ArrowLeft,
+  CreditCard,
   PiggyBank,
-  BarChart3,
-  Clock,
-  Search,
+  TrendingUp,
+  Wallet,
+  DollarSign,
+  Calendar,
   Download,
-  Bell,
-  Settings,
-  Shield,
+  Filter,
+  Search,
   Eye,
   EyeOff,
-  Plus,
-  Filter,
-  Calendar,
-  ChevronRight,
+  RefreshCw,
+  BarChart3,
+  Clock,
   AlertCircle,
   CheckCircle,
   XCircle,
-  RefreshCw
+  ChevronDown,
+  ChevronUp,
+  FileText,
+  Share2,
+  Settings,
+  Lock,
+  Unlock
 } from 'lucide-react';
 
 // Types
@@ -40,6 +42,11 @@ interface Account {
   status: 'active' | 'blocked' | 'suspended';
   bank: string;
   lastUpdated: string;
+  openingDate: string;
+  interestRate?: number;
+  monthlyFee?: number;
+  dailyLimit: number;
+  monthlyLimit: number;
 }
 
 interface Transaction {
@@ -54,11 +61,6 @@ interface Transaction {
   accountId: string;
 }
 
-interface BalanceData {
-  date: string;
-  balance: number;
-}
-
 // Mock data
 const mockAccounts: Account[] = [
   {
@@ -70,7 +72,11 @@ const mockAccounts: Account[] = [
     availableBalance: 15200.00,
     status: 'active',
     bank: 'Banco do Brasil',
-    lastUpdated: '2024-01-15T10:30:00Z'
+    lastUpdated: '2024-01-15T10:30:00Z',
+    openingDate: '2020-03-15T00:00:00Z',
+    monthlyFee: 0.00,
+    dailyLimit: 10000,
+    monthlyLimit: 50000
   },
   {
     id: '2',
@@ -81,7 +87,11 @@ const mockAccounts: Account[] = [
     availableBalance: 25000.00,
     status: 'active',
     bank: 'Banco do Brasil',
-    lastUpdated: '2024-01-15T10:30:00Z'
+    lastUpdated: '2024-01-15T10:30:00Z',
+    openingDate: '2019-06-20T00:00:00Z',
+    interestRate: 0.5,
+    dailyLimit: 50000,
+    monthlyLimit: 200000
   },
   {
     id: '3',
@@ -92,7 +102,11 @@ const mockAccounts: Account[] = [
     availableBalance: 75000.00,
     status: 'active',
     bank: 'Itaú',
-    lastUpdated: '2024-01-15T10:30:00Z'
+    lastUpdated: '2024-01-15T10:30:00Z',
+    openingDate: '2021-01-10T00:00:00Z',
+    interestRate: 1.2,
+    dailyLimit: 100000,
+    monthlyLimit: 500000
   }
 ];
 
@@ -149,28 +163,39 @@ const mockTransactions: Transaction[] = [
     status: 'completed',
     merchant: 'Maria Santos',
     accountId: '1'
+  },
+  {
+    id: '6',
+    date: '2024-01-13T09:15:00Z',
+    description: 'Rendimento Poupança',
+    category: 'Rendimento',
+    amount: 125.00,
+    type: 'credit',
+    status: 'completed',
+    accountId: '2'
+  },
+  {
+    id: '7',
+    date: '2024-01-12T14:20:00Z',
+    description: 'Aplicação CDB',
+    category: 'Investimento',
+    amount: 5000.00,
+    type: 'debit',
+    status: 'completed',
+    accountId: '3'
   }
 ];
 
-const mockBalanceData: BalanceData[] = [
-  { date: '2024-01-10', balance: 12000 },
-  { date: '2024-01-11', balance: 12500 },
-  { date: '2024-01-12', balance: 11800 },
-  { date: '2024-01-13', balance: 12200 },
-  { date: '2024-01-14', balance: 13100 },
-  { date: '2024-01-15', balance: 15420 }
-];
-
-export default function DashboardPage() {
+export default function AccountsPage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
-  const [showBalances, setShowBalances] = useState(true);
-  const [selectedAccount, setSelectedAccount] = useState<string>('all');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [dateFilter, setDateFilter] = useState('7d');
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const [balanceData, setBalanceData] = useState<BalanceData[]>([]);
+  const [selectedAccount, setSelectedAccount] = useState<string>('all');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [dateFilter, setDateFilter] = useState('30d');
+  const [showBalances, setShowBalances] = useState(true);
+  const [showAccountDetails, setShowAccountDetails] = useState<string | null>(null);
 
   useEffect(() => {
     // Check if user is authenticated
@@ -185,7 +210,6 @@ export default function DashboardPage() {
     // Load mock data
     setAccounts(mockAccounts);
     setTransactions(mockTransactions);
-    setBalanceData(mockBalanceData);
 
     // Simulate loading
     setTimeout(() => setIsLoading(false), 1000);
@@ -245,6 +269,40 @@ export default function DashboardPage() {
       <XCircle className="w-4 h-4 text-red-600" />;
   };
 
+  const downloadStatement = (accountId: string) => {
+    // Simulate download
+    const account = accounts.find(a => a.id === accountId);
+    const accountTransactions = transactions.filter(t => t.accountId === accountId);
+    
+    const statementContent = `
+      EXTRATO BANCÁRIO
+      
+      Conta: ${account?.name}
+      Número: ${account?.number}
+      Banco: ${account?.bank}
+      Período: ${new Date().toLocaleDateString('pt-BR')}
+      
+      SALDO INICIAL: ${formatCurrency(account?.balance || 0)}
+      
+      TRANSAÇÕES:
+      ${accountTransactions.map(t => 
+        `${formatDate(t.date)} - ${t.description} - ${t.type === 'credit' ? '+' : '-'}${formatCurrency(t.amount)}`
+      ).join('\n')}
+      
+      SALDO FINAL: ${formatCurrency(account?.balance || 0)}
+    `;
+    
+    const blob = new Blob([statementContent], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `extrato-${account?.name}-${new Date().toISOString().split('T')[0]}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
@@ -252,7 +310,7 @@ export default function DashboardPage() {
           <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4 animate-pulse">
             <Building2 className="w-8 h-8 text-white" />
           </div>
-          <p className="text-gray-600">Carregando seu dashboard...</p>
+          <p className="text-gray-600">Carregando suas contas...</p>
         </div>
       </div>
     );
@@ -263,30 +321,19 @@ export default function DashboardPage() {
       {/* Header */}
       <header className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-3">
+          <div className="flex items-center h-16">
+            <button
+              onClick={() => router.push('/dashboard')}
+              className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 transition-colors"
+            >
+              <ArrowLeft className="w-5 h-5" />
+              <span>Voltar</span>
+            </button>
+            <div className="ml-6 flex items-center space-x-3">
               <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                <Building2 className="w-5 h-5 text-white" />
+                <Wallet className="w-5 h-5 text-white" />
               </div>
-              <h1 className="text-xl font-bold text-gray-900">Open Banking Dashboard</h1>
-            </div>
-            <div className="flex items-center space-x-4">
-              <button className="p-2 text-gray-600 hover:text-gray-900 transition-colors">
-                <Bell className="w-5 h-5" />
-              </button>
-              <button className="p-2 text-gray-600 hover:text-gray-900 transition-colors">
-                <Settings className="w-5 h-5" />
-              </button>
-              <button
-                onClick={() => {
-                  localStorage.removeItem('authToken');
-                  localStorage.removeItem('consentData');
-                  router.push('/');
-                }}
-                className="text-gray-600 hover:text-gray-900 transition-colors"
-              >
-                Sair
-              </button>
+              <h1 className="text-xl font-bold text-gray-900">Suas Contas</h1>
             </div>
           </div>
         </div>
@@ -294,18 +341,8 @@ export default function DashboardPage() {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Welcome Section */}
-        <div className="mb-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">
-            Olá! Bem-vindo ao seu Dashboard
-          </h2>
-          <p className="text-gray-600">
-            Gerencie suas contas, visualize transações e realize pagamentos PIX
-          </p>
-        </div>
-
-        {/* Account Overview Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        {/* Overview Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <div className="bg-white rounded-2xl shadow-lg p-6">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center space-x-3">
@@ -367,32 +404,23 @@ export default function DashboardPage() {
               Última atualização: {new Date().toLocaleTimeString('pt-BR')}
             </div>
           </div>
-        </div>
 
-        {/* Quick Actions */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-          <button 
-            onClick={() => router.push('/dashboard/pix')}
-            className="bg-green-600 text-white p-4 rounded-2xl hover:bg-green-700 transition-colors flex items-center justify-center space-x-2"
-          >
-            <Plus className="w-5 h-5" />
-            <span>Enviar PIX</span>
-          </button>
-          <button className="bg-blue-600 text-white p-4 rounded-2xl hover:bg-blue-700 transition-colors flex items-center justify-center space-x-2">
-            <ArrowRight className="w-5 h-5" />
-            <span>Transferir</span>
-          </button>
-          <button className="bg-purple-600 text-white p-4 rounded-2xl hover:bg-purple-700 transition-colors flex items-center justify-center space-x-2">
-            <Download className="w-5 h-5" />
-            <span>Extrato</span>
-          </button>
-          <button 
-            onClick={() => router.push('/dashboard/consent')}
-            className="bg-orange-600 text-white p-4 rounded-2xl hover:bg-orange-700 transition-colors flex items-center justify-center space-x-2"
-          >
-            <Shield className="w-5 h-5" />
-            <span>Consentimento</span>
-          </button>
+          <div className="bg-white rounded-2xl shadow-lg p-6">
+            <div className="flex items-center space-x-3 mb-4">
+              <div className="w-10 h-10 bg-orange-600 rounded-lg flex items-center justify-center">
+                <TrendingUp className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <p className="text-sm text-gray-600">Rendimento Mensal</p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {showBalances ? formatCurrency(125.50) : '••••••'}
+                </p>
+              </div>
+            </div>
+            <div className="text-sm text-gray-600">
+              +0.5% este mês
+            </div>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -400,12 +428,9 @@ export default function DashboardPage() {
           <div className="lg:col-span-1">
             <div className="bg-white rounded-2xl shadow-lg p-6">
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-lg font-semibold text-gray-900">Suas Contas</h3>
-                <button 
-                  onClick={() => router.push('/dashboard/accounts')}
-                  className="text-blue-600 hover:text-blue-700 text-sm font-medium"
-                >
-                  Ver todas
+                <h3 className="text-lg font-semibold text-gray-900">Todas as Contas</h3>
+                <button className="text-blue-600 hover:text-blue-700 text-sm font-medium">
+                  + Nova Conta
                 </button>
               </div>
               
@@ -427,7 +452,7 @@ export default function DashboardPage() {
                       </span>
                     </div>
                     
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between mb-3">
                       <div>
                         <p className="text-sm text-gray-600">Saldo</p>
                         <p className="font-semibold text-gray-900">
@@ -442,20 +467,62 @@ export default function DashboardPage() {
                       </div>
                     </div>
                     
-                    <div className="mt-3 pt-3 border-t border-gray-100">
-                      <p className="text-xs text-gray-500">{account.bank}</p>
+                    <div className="flex items-center justify-between text-xs text-gray-500 mb-3">
+                      <span>{account.bank}</span>
+                      <span>Limite: {formatCurrency(account.dailyLimit)}/dia</span>
                     </div>
+
+                    <div className="flex items-center justify-between">
+                      <button
+                        onClick={() => setShowAccountDetails(showAccountDetails === account.id ? null : account.id)}
+                        className="text-blue-600 hover:text-blue-700 text-sm font-medium flex items-center space-x-1"
+                      >
+                        <span>Detalhes</span>
+                        {showAccountDetails === account.id ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                      </button>
+                      <button
+                        onClick={() => downloadStatement(account.id)}
+                        className="text-green-600 hover:text-green-700 text-sm font-medium"
+                      >
+                        Extrato
+                      </button>
+                    </div>
+
+                    {showAccountDetails === account.id && (
+                      <div className="mt-4 pt-4 border-t border-gray-100 space-y-2 text-sm">
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Data de Abertura:</span>
+                          <span>{formatDate(account.openingDate)}</span>
+                        </div>
+                        {account.interestRate && (
+                          <div className="flex justify-between">
+                            <span className="text-gray-600">Taxa de Juros:</span>
+                            <span>{account.interestRate}% ao mês</span>
+                          </div>
+                        )}
+                        {account.monthlyFee !== undefined && (
+                          <div className="flex justify-between">
+                            <span className="text-gray-600">Taxa Mensal:</span>
+                            <span>{formatCurrency(account.monthlyFee)}</span>
+                          </div>
+                        )}
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Limite Mensal:</span>
+                          <span>{formatCurrency(account.monthlyLimit)}</span>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
             </div>
           </div>
 
-          {/* Recent Transactions */}
+          {/* Transactions */}
           <div className="lg:col-span-2">
             <div className="bg-white rounded-2xl shadow-lg p-6">
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-lg font-semibold text-gray-900">Transações Recentes</h3>
+                <h3 className="text-lg font-semibold text-gray-900">Histórico de Transações</h3>
                 <button className="text-blue-600 hover:text-blue-700 text-sm font-medium">
                   Ver todas
                 </button>
@@ -502,7 +569,7 @@ export default function DashboardPage() {
 
               {/* Transactions List */}
               <div className="space-y-4">
-                {filteredTransactions.slice(0, 5).map((transaction) => (
+                {filteredTransactions.slice(0, 10).map((transaction) => (
                   <div key={transaction.id} className="flex items-center justify-between p-4 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors">
                     <div className="flex items-center space-x-4">
                       <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
@@ -543,65 +610,6 @@ export default function DashboardPage() {
                 </div>
               )}
             </div>
-          </div>
-        </div>
-
-        {/* Balance Chart Section */}
-        <div className="mt-8">
-          <div className="bg-white rounded-2xl shadow-lg p-6">
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-lg font-semibold text-gray-900">Evolução do Saldo</h3>
-              <div className="flex items-center space-x-2">
-                <button className="p-2 text-gray-600 hover:text-gray-900 transition-colors">
-                  <RefreshCw className="w-4 h-4" />
-                </button>
-                <select className="px-3 py-1 border border-gray-300 rounded-lg text-sm">
-                  <option value="7d">7 dias</option>
-                  <option value="30d">30 dias</option>
-                  <option value="90d">90 dias</option>
-                </select>
-              </div>
-            </div>
-            
-            {/* Simple Chart Representation */}
-            <div className="h-64 bg-gray-50 rounded-lg flex items-end justify-between p-4">
-              {balanceData.map((data, index) => (
-                <div key={index} className="flex flex-col items-center space-y-2">
-                  <div 
-                    className="bg-blue-600 rounded-t w-8 transition-all hover:bg-blue-700"
-                    style={{ height: `${(data.balance / Math.max(...balanceData.map(d => d.balance))) * 200}px` }}
-                  ></div>
-                  <span className="text-xs text-gray-600">{new Date(data.date).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })}</span>
-                </div>
-              ))}
-            </div>
-            
-            <div className="mt-4 text-center">
-              <p className="text-sm text-gray-600">
-                Saldo atual: <span className="font-semibold text-gray-900">{formatCurrency(totalBalance)}</span>
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Consent Management Section */}
-        <div className="mt-8">
-          <div className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-shadow">
-            <div className="flex items-center space-x-3 mb-4">
-              <div className="w-10 h-10 bg-purple-600 rounded-lg flex items-center justify-center">
-                <Building2 className="w-6 h-6 text-white" />
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900">Consent Management</h3>
-            </div>
-            <p className="text-gray-600 mb-4">
-              Manage your data sharing permissions
-            </p>
-            <button 
-              onClick={() => router.push('/dashboard/consent')}
-              className="w-full bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 transition-colors"
-            >
-              Manage Consent
-            </button>
           </div>
         </div>
       </main>
