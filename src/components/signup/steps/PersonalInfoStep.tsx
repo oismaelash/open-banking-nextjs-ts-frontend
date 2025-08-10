@@ -14,11 +14,19 @@ const personalInfoSchema = z.object({
     .regex(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/, 'Invalid CPF format'),
   dateOfBirth: z.string()
     .min(1, 'Date of birth is required')
+    .regex(/^\d{2}\/\d{2}\/\d{4}$/, 'Date must be in format DD/MM/YYYY')
     .refine((date) => {
-      const birthDate = new Date(date);
+      const [day, month, year] = date.split('/').map(Number);
+      const birthDate = new Date(year, month - 1, day);
       const today = new Date();
       const age = today.getFullYear() - birthDate.getFullYear();
-      return age >= 18 && age <= 120;
+      const monthDiff = today.getMonth() - birthDate.getMonth();
+      const dayDiff = today.getDate() - birthDate.getDate();
+      
+      // Adjust age if birthday hasn't occurred this year
+      const adjustedAge = monthDiff < 0 || (monthDiff === 0 && dayDiff < 0) ? age - 1 : age;
+      
+      return adjustedAge >= 18 && adjustedAge <= 120;
     }, 'You must be at least 18 years old'),
 });
 
@@ -54,8 +62,24 @@ export function PersonalInfoStep({ formData, updateFormData, onNext, isLoading }
     return numbers.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
   };
 
+  const formatDate = (value: string) => {
+    const numbers = value.replace(/\D/g, '');
+    if (numbers.length <= 2) {
+      return numbers;
+    } else if (numbers.length <= 4) {
+      return `${numbers.slice(0, 2)}/${numbers.slice(2)}`;
+    } else {
+      return `${numbers.slice(0, 2)}/${numbers.slice(2, 4)}/${numbers.slice(4, 8)}`;
+    }
+  };
+
   const handleCPFChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const formatted = formatCPF(e.target.value);
+    e.target.value = formatted;
+  };
+
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formatted = formatDate(e.target.value);
     e.target.value = formatted;
   };
 
@@ -139,11 +163,13 @@ export function PersonalInfoStep({ formData, updateFormData, onNext, isLoading }
             <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
             <input
               {...register('dateOfBirth')}
-              type="date"
+              type="text"
               id="dateOfBirth"
               className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
                 errors.dateOfBirth ? 'border-red-300' : 'border-gray-300'
               }`}
+              placeholder="DD/MM/YYYY"
+              onChange={handleDateChange}
               aria-describedby={errors.dateOfBirth ? 'dateOfBirth-error' : undefined}
             />
           </div>
