@@ -6,7 +6,7 @@ import { SignupHeader } from '@/components/signup/SignupHeader';
 
 export default function SignupPage() {
   const [currentStep, setCurrentStep] = useState(1);
-  const totalSteps = 10; // Updated to include all steps including success
+  const totalSteps = 9; // Fixed: There are 9 steps total (1-9)
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex flex-col">
