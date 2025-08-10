@@ -7,7 +7,6 @@ import { AddressInfoStep } from './steps/AddressInfoStep';
 import { DocumentVerificationStep } from './steps/DocumentVerificationStep';
 import { PasswordSecurityStep } from './steps/PasswordSecurityStep';
 import { TermsConditionsStep } from './steps/TermsConditionsStep';
-import { EmailVerificationStep } from './steps/EmailVerificationStep';
 import { SecurityQuestionsStep } from './steps/SecurityQuestionsStep';
 import { BiometricSetupStep } from './steps/BiometricSetupStep';
 import { SignupSuccessStep } from './steps/SignupSuccessStep';
@@ -188,16 +187,6 @@ export function SignupForm({ currentStep, setCurrentStep, totalSteps }: SignupFo
         );
       case 7:
         return (
-          <EmailVerificationStep
-            formData={formData}
-            updateFormData={updateFormData}
-            onNext={nextStep}
-            onPrev={prevStep}
-            isLoading={isLoading}
-          />
-        );
-      case 8:
-        return (
           <SecurityQuestionsStep
             formData={formData}
             updateFormData={updateFormData}
@@ -206,7 +195,7 @@ export function SignupForm({ currentStep, setCurrentStep, totalSteps }: SignupFo
             isLoading={isLoading}
           />
         );
-      case 9:
+      case 8:
         return (
           <BiometricSetupStep
             formData={formData}
@@ -216,7 +205,7 @@ export function SignupForm({ currentStep, setCurrentStep, totalSteps }: SignupFo
             isLoading={isLoading}
           />
         );
-      case 10:
+      case 9:
         return <SignupSuccessStep />;
       default:
         return null;
